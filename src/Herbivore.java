@@ -10,8 +10,4 @@ public class Herbivore extends Creature {
     boolean isEdibleBy(Creature creature) {
         return creature instanceof Predator;
     }
-    @Override
-    void makeMove(World world, Actions actions) {
-        actions.makeMove(world, this);
-    }
 }

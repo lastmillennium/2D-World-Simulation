@@ -1,5 +1,5 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 public class World {
     final int width = 10;
     final int depth = 10;
@@ -27,5 +27,100 @@ public class World {
         return position.x >= 0 && position.x < width
                 && position.y >= 0 && position.y < depth
                 && !(world.get(position) instanceof Rock);
+    }
+    Map<Position, Position> wayToFoodSearch(Position start, Creature creature) {
+        Queue<Position> Edible = new LinkedList<>();
+        Map<Position, Position> previousPosition = new LinkedHashMap<>();
+        Set<Position> searched = new HashSet<>();
+        Edible.add(start);
+        searched.add(start);
+        while (!Edible.isEmpty()) {
+            Position possiblePos = Edible.remove();
+            if (world.get(possiblePos) != null && world.get(possiblePos).isEdibleBy(creature)) {
+                return previousPosition;
+            } else {
+                Position up = new Position(possiblePos.x, possiblePos.y - 1);
+                Position down = new Position(possiblePos.x, possiblePos.y + 1);
+                Position left = new Position(possiblePos.x - 1, possiblePos.y);
+                Position right = new Position(possiblePos.x + 1, possiblePos.y);
+                if (isGoingAbroad(up) && !searched.contains(up)) {
+                    Edible.add(up);
+                    searched.add(up);
+                    previousPosition.put(up, possiblePos);
+                }
+                if (isGoingAbroad(down) && !searched.contains(down)) {
+                    Edible.add(down);
+                    searched.add(down);
+                    previousPosition.put(down, possiblePos);
+                }
+                if (isGoingAbroad(left) && !searched.contains(left)) {
+                    Edible.add(left);
+                    searched.add(left);
+                    previousPosition.put(left, possiblePos);
+                }
+                if (isGoingAbroad(right) && !searched.contains(right)) {
+                    Edible.add(right);
+                    searched.add(right);
+                    previousPosition.put(right, possiblePos);
+                }
+            }
+        }
+        return null;
+    }
+    Position foodPosition(Position start, Creature creature) {
+        Queue<Position> Edible = new LinkedList<>();
+        Set<Position> searched = new HashSet<>();
+        Edible.add(start);
+        searched.add(start);
+        while (!Edible.isEmpty()) {
+            Position possiblePos = Edible.remove();
+            if (world.get(possiblePos) != null && world.get(possiblePos).isEdibleBy(creature)) {
+                return possiblePos;
+            } else {
+                Position up = new Position(possiblePos.x, possiblePos.y - 1);
+                Position down = new Position(possiblePos.x, possiblePos.y + 1);
+                Position left = new Position(possiblePos.x - 1, possiblePos.y);
+                Position right = new Position(possiblePos.x + 1, possiblePos.y);
+                if (isGoingAbroad(up) && !searched.contains(up)) {
+                    Edible.add(up);
+                    searched.add(up);
+                }
+                if (isGoingAbroad(down) && !searched.contains(down)) {
+                    Edible.add(down);
+                    searched.add(down);
+                }
+                if (isGoingAbroad(left) && !searched.contains(left)) {
+                    Edible.add(left);
+                    searched.add(left);
+                }
+                if (isGoingAbroad(right) && !searched.contains(right)) {
+                    Edible.add(right);
+                    searched.add(right);
+                }
+            }
+        }
+        return null;
+    }
+    Map<Position, Position> pathToFood(Map<Position, Position> dirtPath, Position end) {
+        Map<Position, Position> clean = new LinkedHashMap<>();
+        Position current = end;
+        Position parent;
+        while (current != null) {
+            parent = dirtPath.get(current);
+            if (dirtPath.containsKey(current)) {
+                clean.put(current, parent);
+            }
+            current = parent;
+        }
+        return clean;
+    }
+    Position getNextStep(Map<Position, Position> path, Position start) {
+        Position next = start;
+        for (Map.Entry<Position, Position> entry : path.entrySet()) {
+            if (entry.getValue().equals(start)) {
+                next = entry.getKey();
+            }
+        }
+        return next;
     }
 }

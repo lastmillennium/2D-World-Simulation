@@ -3,7 +3,7 @@ public class MoveCommand implements Command {
     MoveCommand(Creature creature) {
         this.creature = creature;
     }
-    public void execute(World world, Actions actions) {
-        creature.makeMove(world, actions);
+    public void execute(World world) {
+        creature.makeMove(world);
     }
 }

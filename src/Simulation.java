@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
-
 public class Simulation {
-    Actions actions = new Actions();
     void decisionPhase(World world, List<Command> commands) {
         for (Entity entity : new ArrayList<>(world.world.values())) {
             if (entity instanceof Creature creature) {
@@ -12,7 +10,7 @@ public class Simulation {
     }
     void movementPhase(World world, List<Command> commands) {
         for(Command command : commands) {
-            command.execute(world, actions);
+            command.execute(world);
         }
     }
     void tick(World world) {
