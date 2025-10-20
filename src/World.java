@@ -23,10 +23,13 @@ public class World {
         setEntity(new Position(5, 5), new Herbivore(new Position(5, 5)));
         setEntity(new Position(7, 7), new Predator(new Position(7, 7)));
     }
-    boolean isGoingAbroad (Position position) {
+    boolean isGoingAbroad(Position position) {
         return position.x >= 0 && position.x < width
                 && position.y >= 0 && position.y < depth
                 && !(world.get(position) instanceof Rock);
+    }
+    boolean isAnybodyHere(Position position) {
+        return world.get(position) instanceof Creature;
     }
     Map<Position, Position> wayToFoodSearch(Position start, Creature creature) {
         Queue<Position> Edible = new LinkedList<>();
